@@ -11,14 +11,31 @@ module.exports = {
 	output: {
 		filename: "js/[name].js"
 	},
+	devtool: 'source-map',
 	module: {
 		rules: [
 			{
 				test: /\.scss$/,
 				use: [
-					isDevMode ? 'style-loader' : MiniCssExtractPlugin.loader,
-					"css-loader",
-					"sass-loader"
+					{ loader: MiniCssExtractPlugin.loader },				  				  
+					{ 
+						loader: "css-loader",
+						options: {
+							sourceMap: true,
+						}
+					},
+					{
+						loader: "postcss-loader",
+						options: {
+							sourceMap: true
+						}
+					},
+					{ 
+						loader: "sass-loader", 
+						options: {
+							sourceMap: true,
+						}
+					}
 				]
 			},
 			{
@@ -56,7 +73,8 @@ module.exports = {
 		]
 	},
 	devServer: {
-		port: 8080
+		port: 8080,
+		open: 'chrome'
 	},
 	plugins: [
 		new CleanWebpackPlugin(["dist"]),
@@ -65,12 +83,6 @@ module.exports = {
 		}),
 		new HtmlWebpackPlugin({
 			template: 'src/index.html'
-		}),
-		new HtmlWebpackPlugin({
-			template: 'src/index.html',
-			filename: "about.html"
-		}),
-
-
+		})
 	]
 }
